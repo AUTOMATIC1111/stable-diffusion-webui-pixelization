@@ -1,7 +1,5 @@
 import os
 
-from basicsr.utils.download_util import load_file_from_url
-
 from modules import scripts_postprocessing, devices, scripts
 import gradio as gr
 import sys
@@ -106,9 +104,23 @@ class Model(torch.nn.Module):
         self.alias_net = None
 
     def load(self):
-        load_file_from_url("...", model_dir=path_checkpoints, file_name="pixelart_vgg19.pth")
-        load_file_from_url("...", model_dir=path_checkpoints, file_name="160_net_G_A.pth")
-        load_file_from_url("...", model_dir=path_checkpoints, file_name="alias_net.pth")
+        os.makedirs(path_checkpoints, exist_ok=True)
+
+        missing = False
+
+        if not os.path.exists(path_pixelart_vgg19):
+            print(f"Missing {path_pixelart_vgg19} - download it from https://drive.google.com/uc?id=1VRYKQOsNlE1w1LXje3yTRU5THN2MGdMM")
+            missing = True
+
+        if not os.path.exists(path_160_net_G_A):
+            print(f"Missing {path_160_net_G_A} - download it from https://drive.google.com/uc?id=1i_8xL3stbLWNF4kdQJ50ZhnRFhSDh3Az")
+            missing = True
+
+        if not os.path.exists(path_alias_net):
+            print(f"Missing {path_alias_net} - download it from https://drive.google.com/uc?id=17f2rKnZOpnO9ATwRXgqLz5u5AZsyDvq_")
+            missing = True
+
+        assert not missing, 'Missing checkpoints for pixelization - see console for doqwnload links.'
 
         with torch.no_grad():
             self.G_A_net = define_G(3, 3, 64, "c2pGen", "instance", False, "normal", 0.02, [0])
@@ -181,8 +193,10 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
             return
 
         if self.model is None:
-            self.model = Model()
-            self.model.load()
+            model = Model()
+            model.load()
+
+            self.model = model
 
         self.model.to(devices.device)
 
