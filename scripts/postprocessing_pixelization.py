@@ -2,18 +2,16 @@ import os
 
 from modules import scripts_postprocessing, devices, scripts
 import gradio as gr
-import sys
 
 from modules.ui_components import FormRow
-
-sys.path = [os.path.join(scripts.basedir(), "pixelization")] + sys.path
 
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
 import numpy as np
-from models.networks import define_G
-import models.c2pGen
+
+from pixelization.models.networks import define_G
+import pixelization.models.c2pGen
 
 pixelize_code = [
     233356.8125, -27387.5918, -32866.8008, 126575.0312, -181590.0156,
@@ -93,7 +91,7 @@ class TorchHijackForC2pGen:
         return torch.load(filename, *args, **kwargs)
 
 
-models.c2pGen.torch = TorchHijackForC2pGen()
+pixelization.models.c2pGen.torch = TorchHijackForC2pGen()
 
 
 class Model(torch.nn.Module):
