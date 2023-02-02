@@ -118,7 +118,7 @@ class Model(torch.nn.Module):
             print(f"Missing {path_alias_net} - download it from https://drive.google.com/uc?id=17f2rKnZOpnO9ATwRXgqLz5u5AZsyDvq_")
             missing = True
 
-        assert not missing, 'Missing checkpoints for pixelization - see console for doqwnload links.'
+        assert not missing, 'Missing checkpoints for pixelization - see console for download links.'
 
         with torch.no_grad():
             self.G_A_net = define_G(3, 3, 64, "c2pGen", "instance", False, "normal", 0.02, [0])
