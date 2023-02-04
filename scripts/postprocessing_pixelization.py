@@ -178,7 +178,7 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
                     upscale_after = gr.Checkbox(False, label="Keep resolution")
 
             with gr.Column():
-                pixel_size = gr.Slider(minimum=1, maximum=16, step=1, label="Pixel size", value=1, elem_id="pixelization_pixel_size")
+                pixel_size = gr.Slider(minimum=1, maximum=16, step=1, label="Pixel size", value=4, elem_id="pixelization_pixel_size")
 
         return {
             "enable": enable,
