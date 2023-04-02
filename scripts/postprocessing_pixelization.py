@@ -12,6 +12,7 @@ import numpy as np
 
 from pixelization.models.networks import define_G
 import pixelization.models.c2pGen
+import gdown
 
 pixelize_code = [
     233356.8125, -27387.5918, -32866.8008, 126575.0312, -181590.0156,
@@ -104,21 +105,14 @@ class Model(torch.nn.Module):
     def load(self):
         os.makedirs(path_checkpoints, exist_ok=True)
 
-        missing = False
-
         if not os.path.exists(path_pixelart_vgg19):
-            print(f"Missing {path_pixelart_vgg19} - download it from https://drive.google.com/uc?id=1VRYKQOsNlE1w1LXje3yTRU5THN2MGdMM")
-            missing = True
+            gdown.download("https://drive.google.com/uc?id=1VRYKQOsNlE1w1LXje3yTRU5THN2MGdMM", path_pixelart_vgg19)
 
         if not os.path.exists(path_160_net_G_A):
-            print(f"Missing {path_160_net_G_A} - download it from https://drive.google.com/uc?id=1i_8xL3stbLWNF4kdQJ50ZhnRFhSDh3Az")
-            missing = True
+            gdown.download("https://drive.google.com/uc?id=1i_8xL3stbLWNF4kdQJ50ZhnRFhSDh3Az", path_160_net_G_A)
 
         if not os.path.exists(path_alias_net):
-            print(f"Missing {path_alias_net} - download it from https://drive.google.com/uc?id=17f2rKnZOpnO9ATwRXgqLz5u5AZsyDvq_")
-            missing = True
-
-        assert not missing, 'Missing checkpoints for pixelization - see console for doqwnload links.'
+            gdown.download("https://drive.google.com/uc?id=17f2rKnZOpnO9ATwRXgqLz5u5AZsyDvq_", path_alias_net)
 
         with torch.no_grad():
             self.G_A_net = define_G(3, 3, 64, "c2pGen", "instance", False, "normal", 0.02, [0])
