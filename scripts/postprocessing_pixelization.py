@@ -160,10 +160,12 @@ def to_image(tensor, pixel_size, upscale_after, original_img, copy_hue, copy_sat
     img = (np.transpose(img, (1, 2, 0)) + 1) / 2.0 * 255.0
     img = img.astype(np.uint8)
     img = Image.fromarray(img)
-    img = img.resize((img.size[0]//4, img.size[1]//4), resample=Image.Resampling.NEAREST)
+    width = img.size[0]//4
+    height = img.size[1]//4
+    img = img.resize((width, height), resample=Image.Resampling.NEAREST)
     
     if copy_hue or copy_sat:
-        original_img = original_img.resize((original_img.size[0]//4, original_img.size[1]//4), resample=Image.Resampling.NEAREST)
+        original_img = original_img.resize((width, height), resample=Image.Resampling.NEAREST)
         img = color_image(img, original_img, copy_hue, copy_sat);
     
     if upscale_after:
@@ -176,6 +178,8 @@ def color_image(img, original_img, copy_hue, copy_sat):
     original_img = original_img.convert("RGB")
 
     colored_img = Image.new("RGB", img.size)
+    
+    print(img.width, img.height)
 
     for x in range(img.width):
         for y in range(img.height):
