@@ -105,14 +105,22 @@ class Model(torch.nn.Module):
     def load(self):
         os.makedirs(path_checkpoints, exist_ok=True)
 
-        if not os.path.exists(path_pixelart_vgg19):
-            gdown.download("https://drive.google.com/uc?id=1VRYKQOsNlE1w1LXje3yTRU5THN2MGdMM", path_pixelart_vgg19)
+        missing = False
 
-        if not os.path.exists(path_160_net_G_A):
-            gdown.download("https://drive.google.com/uc?id=1i_8xL3stbLWNF4kdQJ50ZhnRFhSDh3Az", path_160_net_G_A)
+        models = (
+            (path_pixelart_vgg19, "https://drive.google.com/uc?id=1VRYKQOsNlE1w1LXje3yTRU5THN2MGdMM"),
+            (path_160_net_G_A, "https://drive.google.com/uc?id=1i_8xL3stbLWNF4kdQJ50ZhnRFhSDh3Az"),
+            (path_alias_net, "https://drive.google.com/uc?id=17f2rKnZOpnO9ATwRXgqLz5u5AZsyDvq_"),
+        )
 
-        if not os.path.exists(path_alias_net):
-            gdown.download("https://drive.google.com/uc?id=17f2rKnZOpnO9ATwRXgqLz5u5AZsyDvq_", path_alias_net)
+        for path, url in models:
+            if not os.path.exists(path):
+                gdown.download(url, path)
+
+            if not os.path.exists(path):
+                missing = True
+
+        assert not missing, f'Missing checkpoints for pixelization - see console for download links. Download checkpoints manually and place them in {path_checkpoints}.'
 
         with torch.no_grad():
             self.G_A_net = define_G(3, 3, 64, "c2pGen", "instance", False, "normal", 0.02, [0])
