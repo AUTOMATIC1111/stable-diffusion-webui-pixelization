@@ -18,6 +18,8 @@ Download all three models from the table and place them into the `checkpoints` d
 
 License of Pixelization seems to prevent me from reuploading models anywhere and google drive makes it impossible to download them automatically.
 
+Alternatively, there exists a third party link with models, in case you're having truble downloading them from the official source: https://pixeldrain.com/u/QfmACJAG
+
 # Credits
 
 * Original repo: https://github.com/WuZongWei6/Pixelization
