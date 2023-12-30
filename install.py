@@ -10,3 +10,6 @@ try:
     os.remove(os.path.join(path, "pixelization", "models", "__init__.py"))
 except OSError as e:
     pass
+
+if not launch.is_installed("gdown"):
+    launch.run_pip("install gdown", "requirements for stable-diffusion-webui-pixelization")
