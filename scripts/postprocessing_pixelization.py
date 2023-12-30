@@ -1,6 +1,6 @@
 import os
 
-from modules import scripts_postprocessing, devices, scripts
+from modules import scripts_postprocessing, devices, scripts, ui_components
 import gradio as gr
 
 from modules.ui_components import FormRow
@@ -171,13 +171,9 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
     model = None
 
     def ui(self):
-        with FormRow():
-            with gr.Column():
-                with FormRow():
-                    enable = gr.Checkbox(False, label="Enable pixelization")
-                    upscale_after = gr.Checkbox(False, label="Keep resolution")
-
-            with gr.Column():
+        with ui_components.InputAccordion(False, label="Pixelize") as enable:
+            with gr.Row():
+                upscale_after = gr.Checkbox(False, label="Keep resolution")
                 pixel_size = gr.Slider(minimum=1, maximum=16, step=1, label="Pixel size", value=4, elem_id="pixelization_pixel_size")
 
         return {
