@@ -196,7 +196,7 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
 
         self.model.to(devices.device)
 
-        pp.image = pp.image.resize((pp.image.width * 4 // pixel_size, pp.image.height * 4 // pixel_size))
+        pp.image = pp.image.resize((pp.image.width * 4 // pixel_size, pp.image.height * 4 // pixel_size)).convert('RGB')
 
         with torch.no_grad():
             in_t = process(pp.image).to(devices.device)
